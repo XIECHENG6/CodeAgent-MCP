@@ -1,0 +1,24 @@
+servers:
+  file-server:
+    command: "python"
+    args: ["-m", "src.mcp.servers.file_server"]
+    description: "文件读写与搜索"
+    enabled: true
+
+  shell-server:
+    command: "python"
+    args: ["-m", "src.mcp.servers.shell_server"]
+    description: "Shell 命令执行 (受限安全沙箱)"
+    enabled: true
+
+  git-server:
+    command: "python"
+    args: ["-m", "src.mcp.servers.git_server"]
+    description: "Git 操作 (status/diff/commit/log)"
+    enabled: false
+
+  rag-server:
+    command: "python"
+    args: ["-m", "src.mcp.servers.rag_server"]
+    description: "代码知识库 RAG 检索"
+    enabled: false

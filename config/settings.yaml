@@ -1,0 +1,28 @@
+providers:
+  default:
+    base_url: "https://api.deepseek.com"
+    model: "deepseek-chat"
+    temperature: 0.5
+    max_tokens: 4096
+
+  siliconflow:
+    base_url: "https://api.siliconflow.cn/v1"
+    model: "Qwen/Qwen2.5-72B-Instruct"
+    temperature: 0.5
+    max_tokens: 4096
+
+  openai:
+    base_url: "https://api.openai.com/v1"
+    model: "gpt-4o-mini"
+    temperature: 0.5
+    max_tokens: 4096
+
+orchestrator:
+  max_review_rounds: 3
+  review_threshold: 7.0
+  skip_review_for_simple: false
+
+logging:
+  level: "INFO"
+  show_tool_calls: true
+  show_token_usage: true
