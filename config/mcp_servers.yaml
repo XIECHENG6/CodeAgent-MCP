@@ -15,10 +15,10 @@ servers:
     command: "python"
     args: ["-m", "src.mcp.servers.git_server"]
     description: "Git 操作 (status/diff/commit/log)"
-    enabled: false
+    enabled: true
 
   rag-server:
     command: "python"
     args: ["-m", "src.mcp.servers.rag_server"]
-    description: "代码知识库 RAG 检索"
+    description: "代码知识库 RAG 检索 (需要 sentence-transformers + faiss)"
     enabled: false

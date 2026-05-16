@@ -1,4 +1,5 @@
 import logging
+import os
 from contextlib import AsyncExitStack
 
 from mcp import ClientSession, StdioServerParameters
@@ -14,10 +15,11 @@ class MCPManager:
         self.tools_registry: dict[str, dict] = {}
 
     async def connect_server(self, name: str, command: str, args: list[str], env: dict | None = None):
+        merged_env = {**os.environ, **(env or {})}
         params = StdioServerParameters(
             command=command,
             args=args,
-            env=env,
+            env=merged_env,
         )
 
         stdio_transport = await self._exit_stack.enter_async_context(

@@ -1,0 +1,118 @@
+{
+  "version": "1.0",
+  "description": "CodeAgent-MCP benchmark tasks for evaluation",
+  "tasks": [
+    {
+      "task_id": "B1",
+      "name": "lru_cache",
+      "difficulty": "medium",
+      "description": "实现一个 LRU Cache，支持 get 和 put 操作，容量为 capacity。要求 O(1) 时间复杂度。包含完整的类型注解和单元测试。",
+      "expected_files": ["lru_cache.py"],
+      "test_command": "python -m pytest lru_cache.py -v",
+      "criteria": {
+        "has_class": true,
+        "has_type_hints": true,
+        "has_tests": true,
+        "passes_tests": true
+      }
+    },
+    {
+      "task_id": "B2",
+      "name": "binary_search_tree",
+      "difficulty": "medium",
+      "description": "实现一个二叉搜索树 (BST)，支持 insert, search, delete, inorder_traversal 方法。包含类型注解和至少5个单元测试。",
+      "expected_files": ["bst.py"],
+      "test_command": "python -m pytest bst.py -v",
+      "criteria": {
+        "has_class": true,
+        "has_type_hints": true,
+        "has_tests": true,
+        "passes_tests": true
+      }
+    },
+    {
+      "task_id": "B3",
+      "name": "http_retry_client",
+      "difficulty": "medium",
+      "description": "编写一个带重试机制的 HTTP 客户端类 RetryClient，支持 GET/POST，可配置最大重试次数和退避策略(指数退避)。使用 httpx 库。包含类型注解。",
+      "expected_files": ["retry_client.py"],
+      "test_command": "python -m pytest retry_client.py -v",
+      "criteria": {
+        "has_class": true,
+        "has_type_hints": true,
+        "has_tests": true,
+        "passes_tests": true
+      }
+    },
+    {
+      "task_id": "B4",
+      "name": "csv_analyzer",
+      "difficulty": "easy",
+      "description": "编写一个 CSV 数据分析脚本，读取 CSV 文件，输出：行数、列名、每列的数据类型、数值列的均值/中位数/标准差。使用 pandas。",
+      "expected_files": ["csv_analyzer.py"],
+      "test_command": "python csv_analyzer.py --help",
+      "criteria": {
+        "has_class": false,
+        "has_type_hints": true,
+        "has_tests": false,
+        "passes_tests": false
+      }
+    },
+    {
+      "task_id": "B5",
+      "name": "rate_limiter",
+      "difficulty": "hard",
+      "description": "实现一个线程安全的令牌桶限流器 TokenBucketRateLimiter，支持：1) 可配置速率和桶大小 2) acquire() 方法获取令牌 3) 装饰器模式 @rate_limit(rate=10, burst=20) 。包含多线程测试。",
+      "expected_files": ["rate_limiter.py"],
+      "test_command": "python -m pytest rate_limiter.py -v",
+      "criteria": {
+        "has_class": true,
+        "has_type_hints": true,
+        "has_tests": true,
+        "passes_tests": true
+      }
+    },
+    {
+      "task_id": "B6",
+      "name": "markdown_parser",
+      "difficulty": "hard",
+      "description": "实现一个简易 Markdown 解析器，支持解析标题(#)、粗体(**)、斜体(*)、代码块(```)、无序列表(-)、有序列表(1.)，输出 HTML。包含完整测试。",
+      "expected_files": ["markdown_parser.py"],
+      "test_command": "python -m pytest markdown_parser.py -v",
+      "criteria": {
+        "has_class": true,
+        "has_type_hints": true,
+        "has_tests": true,
+        "passes_tests": true
+      }
+    },
+    {
+      "task_id": "B7",
+      "name": "config_manager",
+      "difficulty": "easy",
+      "description": "实现一个配置管理器，支持从 YAML 和 JSON 文件加载配置，支持环境变量覆盖 (格式: APP__KEY=value)，支持 get/set 和点号路径访问 (如 config.get('database.host'))。",
+      "expected_files": ["config_manager.py"],
+      "test_command": "python -m pytest config_manager.py -v",
+      "criteria": {
+        "has_class": true,
+        "has_type_hints": true,
+        "has_tests": true,
+        "passes_tests": true
+      }
+    },
+    {
+      "task_id": "B8",
+      "name": "async_task_queue",
+      "difficulty": "hard",
+      "description": "实现一个异步任务队列 AsyncTaskQueue，支持：1) 添加异步任务 2) 设置最大并发数 3) 优先级队列 4) 任务超时和重试 5) 进度回调。使用 asyncio。包含测试。",
+      "expected_files": ["async_task_queue.py"],
+      "test_command": "python -m pytest async_task_queue.py -v",
+      "criteria": {
+        "has_class": true,
+        "has_type_hints": true,
+        "has_tests": true,
+        "passes_tests": true
+      }
+    }
+  ]
+}

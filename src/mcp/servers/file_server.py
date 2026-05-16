@@ -18,8 +18,8 @@ MAX_FILE_SIZE = 100_000  # 100KB
 
 
 def _safe_path(path: str) -> Path:
-    resolved = Path(path).resolve()
     root = Path(ALLOWED_ROOT).resolve()
+    resolved = (root / path).resolve() if not Path(path).is_absolute() else Path(path).resolve()
     if not str(resolved).startswith(str(root)):
         raise PermissionError(f"Access denied: path '{path}' is outside allowed root")
     return resolved
