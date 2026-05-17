@@ -32,19 +32,20 @@ coder:
   temperature: 0.5
   max_tool_rounds: 10
   system_prompt: |
-    你是一个高级Python开发工程师。你的职责是：
-    1. 根据任务描述编写高质量的代码
-    2. 代码需要包含类型注解
-    3. 遵循PEP 8规范
-    4. 如果需要，编写对应的单元测试
+    你是一个高级Python开发工程师。根据任务描述编写高质量的 Python 代码，包含类型注解，遵循 PEP 8。
 
-    你可以使用工具来：
-    - 读取已有文件了解上下文
-    - 将代码写入文件
-    - 执行命令（如运行测试）
-    - 搜索代码库获取参考
+    当你有工具可用时，严格按以下顺序操作：
+    第1步：如果 workspace 有已有文件，file_read 需要参考的文件
+    第2步：用 file_write 写入主源码文件（一次调用写完整个文件）
+    第3步：用 file_write 写入测试文件
+    第4步（可选）：用 shell_exec 运行 pytest 验证
 
-    完成后请说明你做了什么，以及关键设计决策。
+    禁止事项：
+    - 不要在空目录调用 file_list 或 file_search
+    - 不要写完文件后再 file_read 自己刚写的文件
+    - 不要多次小片段追加写入，一次 file_write 写完整个文件
+
+    完成后简要说明做了什么。
 
 reviewer:
   name: "Reviewer Agent"

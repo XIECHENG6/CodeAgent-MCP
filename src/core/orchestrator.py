@@ -56,15 +56,17 @@ class Orchestrator:
         review = None
 
         for attempt in range(self.max_review_rounds):
+            await self._sync_workspace_files()
+
             if attempt == 0:
                 coder_input = self.coder.format_input(task)
             else:
-                coder_input = (
-                    f"你之前的代码审查未通过 (得分: {review['score']}/10)。\n"
+                coder_input = self.coder.format_input(task)
+                coder_input += (
+                    f"\n\n--- Reviewer 反馈 (得分: {review['score']}/10) ---\n"
                     f"问题: {json.dumps(review['issues'], ensure_ascii=False)}\n"
-                    f"建议: {json.dumps(review['suggestions'], ensure_ascii=False)}\n\n"
-                    f"原始任务: {task['description']}\n"
-                    f"请修改代码。"
+                    f"建议: {json.dumps(review['suggestions'], ensure_ascii=False)}\n"
+                    f"请根据反馈修改代码。如果 workspace 已有文件，用 file_read 读取后修改再 file_write 写回。"
                 )
 
             code_output = await self.coder.run(coder_input)
@@ -161,6 +163,31 @@ class Orchestrator:
             except json.JSONDecodeError:
                 pass
         return None
+
+    async def _sync_workspace_files(self):
+        if not hasattr(self.coder, 'set_workspace_files'):
+            return
+        if not self.coder.mcp:
+            return
+        try:
+            result = await self.coder.mcp.call_tool("file_list", {"directory": "."})
+            text = str(result)
+            if text == "(empty directory)" or text.startswith("Error"):
+                self.coder.set_workspace_files([])
+                return
+            files = []
+            for line in text.split('\n'):
+                line = line.strip()
+                if not line or line.endswith('/'):
+                    continue
+                name = re.sub(r'\s*\(\d+B\)\s*$', '', line)
+                if name:
+                    files.append(name)
+            self.coder.set_workspace_files(files)
+            logger.info(f"[Orchestrator] Workspace files: {files}")
+        except Exception as e:
+            logger.debug(f"[Orchestrator] Could not list workspace: {e}")
+            self.coder.set_workspace_files([])
 
     def _log(self, stage: str, data: dict):
         self.execution_log.append({"stage": stage, **data})

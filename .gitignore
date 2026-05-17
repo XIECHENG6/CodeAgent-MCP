@@ -30,3 +30,5 @@ output/
 HOW_TO_RUN.md
 PROGRESS.md
 INTERVIEW_PREP.md
+
+notebooks/*_old*.ipynb

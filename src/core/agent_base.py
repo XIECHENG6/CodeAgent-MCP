@@ -14,6 +14,7 @@ class AgentBase(ABC):
         self.llm = llm_client
         self.mcp = mcp_manager
         self.max_tool_rounds = config.get("max_tool_rounds", 5)
+        self.max_tool_result_chars = config.get("max_tool_result_chars", 8000)
         self.conversation: list[dict] = []
         self.total_tokens_used = 0
 
@@ -74,7 +75,10 @@ class AgentBase(ABC):
             return f"Error: No MCP manager available to execute tool '{tool_name}'"
         try:
             result = await self.mcp.call_tool(tool_name, arguments)
-            return str(result)
+            text = str(result)
+            if len(text) > self.max_tool_result_chars:
+                text = text[:self.max_tool_result_chars] + f"\n... (truncated, {len(str(result))} chars total)"
+            return text
         except Exception as e:
             logger.error(f"[{self.name}] Tool '{tool_name}' failed: {e}")
             return f"工具调用失败: {type(e).__name__}: {str(e)}"

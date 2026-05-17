@@ -118,11 +118,23 @@ python -m eval.run_comparison --experiment ablation --tasks B1 B4 B7
 | medium | 3 | 9.07 | 11,702 |
 | hard | 3 | 8.73 | 22,839 |
 
+### MCP Workspace Verification (B7/B8 Fix)
+
+修复 Coder-Reviewer 循环中 workspace 上下文丢失的 bug 后，MCP 模式能正确产出工程文件：
+
+| Task | Workspace Output | Tokens | Score | Code Checks |
+|------|-----------------|--------|-------|-------------|
+| B7 config_manager | `config_manager.py` (16KB) | 579K | 8.5 | class ✓ types ✓ tests ✓ docs ✓ |
+| B8 async_task_queue | 3 files (35KB): source + test + demo | 591K | 8.5 | class ✓ types ✓ tests ✓ docs ✓ |
+
+修复前这两个任务 workspace 为空（Coder 在文本中输出代码但未调用 file_write）。
+
 ### Key Findings
 
-- **MCP 模式分数略高 (+0.06)，但 token 成本 22×**: 质量提升不显著，但产出真正可运行的工程文件（源码 + 测试）
+- **MCP 模式产出真正可运行的工程文件**: 源码 + 单元测试 + 集成 demo，workspace 文件验证通过
 - **单 Agent 会偷懒**: 无 Reviewer 时 B7 仅 227 token 输出，多 Agent 架构的质量门控必不可少
 - **Prompt 工程 ROI 最高**: 一句 "同一模块方法合并" 让 Planner 拆分从 6→2 个，token 降 85%（400K→57K）
+- **Coder-Reviewer 循环中的上下文维护至关重要**: 重试路径必须重新注入 workspace 状态，否则 Coder 退化为纯文本输出
 - **100% 完成率**: 所有 8 个任务（含 3 个 hard）全部通过 score ≥ 7.0
 
 ## Project Structure
