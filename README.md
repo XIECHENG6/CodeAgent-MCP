@@ -129,9 +129,26 @@ python -m eval.run_comparison --experiment ablation --tasks B1 B4 B7
 
 修复前这两个任务 workspace 为空（Coder 在文本中输出代码但未调用 file_write）。
 
+### HumanEval Benchmark
+
+| Metric | Value |
+|--------|-------|
+| pass@1 | **148/164 (90.2%)** |
+| Model | DeepSeek-chat |
+| Time | 326s (164 tasks) |
+
+### Coder Tool-Call Optimization (MCP mode, B1+B5+B6)
+
+| Config | Total Tokens | Avg Score | Change |
+|--------|-------------|-----------|--------|
+| Baseline | 1,165K | 8.83 | — |
+| Optimized prompt | 787K | 8.90 | **-32% tokens** |
+
 ### Key Findings
 
+- **HumanEval 90.2% pass@1**: 通过公认 benchmark 验证系统代码生成能力
 - **MCP 模式产出真正可运行的工程文件**: 源码 + 单元测试 + 集成 demo，workspace 文件验证通过
+- **Coder prompt 优化降低 32% MCP token 消耗**: 减少冗余工具调用（重复 file_list/file_read），质量不变
 - **单 Agent 会偷懒**: 无 Reviewer 时 B7 仅 227 token 输出，多 Agent 架构的质量门控必不可少
 - **Prompt 工程 ROI 最高**: 一句 "同一模块方法合并" 让 Planner 拆分从 6→2 个，token 降 85%（400K→57K）
 - **Coder-Reviewer 循环中的上下文维护至关重要**: 重试路径必须重新注入 workspace 状态，否则 Coder 退化为纯文本输出

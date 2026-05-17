@@ -104,6 +104,21 @@
 3. **B3 额外产出了 pytest.ini**: 说明 Coder 会根据测试需要自主创建配置文件，展现了 Agent 的自主性
 4. **code_checks 在 MCP 模式不准确**: 因为 `analyze_code_output()` 分析的是 Coder 的文本回复而非 workspace 文件。MCP 模式下代码在文件里，回复只是总结
 
+### B7/B8 修复后补充数据 (2026-05-17)
+
+经过两轮迭代修复（详见 04_B7B8_Fix_Test），重新运行 B7/B8：
+
+| 任务 | 修复前 | 修复后 | 变化 |
+|------|--------|--------|------|
+| B7 workspace | **空** | config_manager.py (16KB) ✅ | 修复 |
+| B7 tokens | 606K | 579K | -4.5% |
+| B7 score | 8.5 | 8.5 | 持平 |
+| B8 workspace | **空** | 3 文件 (35KB) ✅ | 修复 |
+| B8 tokens | 685K | 591K | -13.7% |
+| B8 score | 8.5 | 8.5 | 持平 |
+
+**根因**: (1) Reviewer 退回后的重试路径绕过了 `format_input()`，workspace 上下文丢失；(2) workspace 同步只在 subtask 间调用，循环内不同步。修复后 code_checks 也恢复正常
+
 ---
 
 ## 核心结论
@@ -122,8 +137,8 @@ multi_mcp:      高      高      可运行的工程文件
 ### 待优化项
 
 1. **MCP token 成本过高**: Coder 每次都先 `file_list` → `file_search` → `file_read`，大量冗余调用。可优化 Coder prompt 减少探索行为
-2. **B7/B8 workspace 空**: `max_tool_rounds=10` 可能不够复杂任务使用，或需要给 Coder 更明确的"先写文件"指令
-3. **code_checks 修复**: MCP 模式下应读取 workspace 文件做代码质量检查，而非分析文本回复
+2. ~~**B7/B8 workspace 空**~~: 已修复（v2，2026-05-17），根因是重试路径和 workspace 同步 bug
+3. ~~**code_checks 修复**~~: 已修复，MCP 模式下 code_checks 现在能正确分析 workspace 文件
 
 ---
 
