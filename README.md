@@ -75,9 +75,9 @@ python -m eval.run_eval --tasks B1
 
 | Metric | Value |
 |--------|-------|
-| **pass@1** | **148/164 (90.2%)** |
+| **pass@1** | **90.2% avg** (148/164) |
+| Stability | 89.0% - 91.5% across 3 runs |
 | Model | DeepSeek-chat |
-| Mode | Single agent (Coder only) |
 
 ### Custom Benchmark (8 tasks)
 
@@ -88,7 +88,7 @@ python -m eval.run_eval --tasks B1
 |--------------|-----------|-----------|--------|
 | single_agent | 3/3 | N/A | 2.5K |
 | multi_agent (no-mcp) | **8/8** | **8.89** | 136K |
-| multi_agent (mcp) | **8/8** | **8.95** | 3,035K |
+| multi_agent (mcp) | **8/8** | **8.75** | 2,905K |
 
 </td><td>
 
@@ -107,7 +107,7 @@ python -m eval.run_eval --tasks B1
 |-------------|--------|-------|-------------|
 | Planner prompt tuning | 6 subtasks, 400K tokens | 2 subtasks, 57K tokens | **-85% tokens**, +0.4 score |
 | Coder tool-call rules | 1,165K tokens | 787K tokens | **-32% tokens**, quality maintained |
-| B7/B8 workspace fix | Empty workspace, 606K tokens | 16KB+35KB output, 579K tokens | Files restored, -5~14% tokens |
+| B7/B8 workspace fix | Empty workspace | config_manager.py + 3 async files | All 8/8 tasks now produce workspace files |
 
 ### Key Findings
 
